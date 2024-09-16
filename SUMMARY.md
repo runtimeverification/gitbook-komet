@@ -1,22 +1,13 @@
-# Table of contents
+# Summary
 
-## Overview
-
-* [Komet](README.md)
+## [Overview](README.md)
 
 ## Guides
 
-## Tips
+## [Tips](tips/tips-for-using-kontrol.md)
 
-* [Tips for using Kontrol](tips/tips-for-using-kontrol.md)
-
-## Glossary
-
-## Developer Docs
-
-## Learn More
+## [Learn More](learn-more/resources.md)
 
 ## 🔗 Links
-
+* [Komet Homepage](https://komet.runtimeverification.com)
 * [Join our Discord!](https://discord.gg/CurfmXNtbN)
-* [Gitbook Repo](https://github.com/runtimeverification/gitbook-komet)
