@@ -4,8 +4,12 @@ _please contact us for more information contact@runtimeverification.com_
 
 ~~Strikethrough~~
 
+## Why use Komet
+
 ## How to use Komet and Kontrol
 `kontrol build --help`
+
+
 
 ---
 ### Info
