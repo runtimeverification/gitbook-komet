@@ -112,17 +112,30 @@ impl TestAdderContract {
 }
 ```
 
-We are using the create_contract function from komet.rs for deploying a contract with a specified address and a wasm hash. The hash represents the Wasm code of the target contract (in this case, the adder contract). The wasm hash provided to the init function is derived from the kasmer.json file, which contains a relative path to the compiled adder contract. This file enables Komet to locate the wasm file, register the Wasm module, and pass its hash to the init function.
+We are using the `create_contract` function from `komet.rs` for deploying a contract with a specified address and a Wasm hash. The hash represents the Wasm code of the target contract (in this case, the `adder` contract).  
+
+The contracts passed to `init` are specified in the `kasmer.json` file, where we provide the relative path to each contract. In this example, there is only one contract—the `adder` contract—but more complex tests may require multiple contracts. Komet locates and compiles each contract, registers the Wasm module, and passes its hash to the `init` function.  
 
 ```json
 {
  "contracts": [
-   "../../target/wasm32-unknown-unknown/release/adder.wasm"
+   "../adder"
  ]
 }
 ```
 
-Once the init function has successfully completed, all subsequent test cases are executed based on this predefined initial state, ensuring consistency and allowing tests to be performed under controlled conditions.
+Komet will locate the `adder` contract, compile it to Wasm, and register the resulting Wasm module automatically.
+
+If the contract requires a custom build process or is already precompiled, you can provide the path to the compiled Wasm file instead:
+
+```json
+{
+  "contracts": [
+    "../../target/wasm32-unknown-unknown/release/adder.wasm"
+  ]
+}
+```
+
 
 #### Defining Contract Properties: test endpoints
 
@@ -154,17 +167,7 @@ impl TestAdderContract {
 
 Once the test contract is written, the next step is to compile and run it. Here's how you can execute the tests using Komet.
 
-1. Compile the Project
-
-Before running any tests, compile the project from the workspace's root directory:
-
-```bash
-soroban contract build
-```
-
-This command will build both the `adder` and `test_adder` contracts.
-
-2. Navigate to the Test Contract Directory
+1. Navigate to the Test Contract Directory
 
 After compiling the project, change directories into the `test_adder` contract folder:
 
@@ -172,7 +175,7 @@ After compiling the project, change directories into the `test_adder` contract f
 cd contracts/test_adder/
 ```
 
-3. Running Tests with Fuzzing
+2. Running Tests with Fuzzing
 
 To run the tests using fuzzing (which generates random inputs for testing), use the following command:
 
@@ -180,20 +183,19 @@ To run the tests using fuzzing (which generates random inputs for testing), use 
 komet test
 ```
 
-After some compilation logs, you should see an output like this:
+After some compilation logs, you should see a progress bar:
 
+<figure><img src=".gitbook/assets/komet-test-demo.gif" alt=""><figcaption></figcaption></figure>
+
+This indicates that Komet discovered the `test_add` function and successfully executed the test using randomized inputs. By default, Komet runs each test 100 times. You can specify a different number of iterations using the `--max-examples` argument:
+
+```bash
+komet test --max-examples 500
 ```
-Processing contract: test_adder
-Discovered 1 test functions:
-	- test_add
 
-  Running test_add...
-	Test passed.
-```
+This runs the test 500 times, allowing for more thorough fuzzing when needed.
 
-This indicates that Komet discovered the `test_add` function and successfully executed the test using randomized inputs.
-
-4. Running Tests with Symbolic Execution (Proving)
+3. Running Tests with Symbolic Execution (Proving)
 
 To run tests with symbolic execution, which verifies the contract's behavior for all possible inputs, use the following command:
 
@@ -207,17 +209,25 @@ Additionally, you can explore more proving options by using the `--help` flag to
 
 ```bash
 $ komet prove --help
-usage: komet prove [-h] [--wasm WASM] [--proof-dir PROOF_DIR] [--id ID] COMMAND
+usage: komet prove [-h] [--always-allocate] [--node NODE] [--proof-dir PROOF_DIR] [--bug-report BUG_REPORT] [--extra-module EXTRA_MODULE] [--id ID] [--wasm WASM] [--directory DIRECTORY] COMMAND
 
 positional arguments:
-  COMMAND           	Proof command to run. One of (run, view)
+  COMMAND               Proof command to run. One of (run, view, view-node, remove-node)
 
 options:
-  -h, --help        	show this help message and exit
-  --wasm WASM       	Prove a specific contract wasm file instead
+  -h, --help            show this help message and exit
+  --always-allocate
+  --node NODE
   --proof-dir PROOF_DIR
-                    	Output directory for proofs
-  --id ID           	Name of the test function in the testing contract
+                        Output directory for proofs
+  --bug-report BUG_REPORT
+                        Bug report directory for proofs
+  --extra-module EXTRA_MODULE
+                        Extra module with user-defined lemmas to include for verification (which must import KASMER module).Format is <file>:<module name>.
+  --id ID               Name of the test function in the testing contract
+  --wasm WASM           Use a specific contract wasm file instead
+  --directory DIRECTORY, -C DIRECTORY
+                        The working directory for the command (defaults to the current working directory).
 ```
 
 After running the proof with the `--proof-dir` option, you can use the `view` command to inspect the proof tree and examine the details of symbolic execution.
