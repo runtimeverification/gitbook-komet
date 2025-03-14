@@ -1,6 +1,10 @@
+---
+description: How to develop property tests with Komet
+---
+
 # Komet Example: Testing the `adder` Contract
 
-(Source: https://github.com/runtimeverification/komet-demo)
+([Source](https://github.com/runtimeverification/komet-demo))
 
 To illustrate how Komet can be used to test Soroban contracts, let's look at a simple example. We'll be working with a basic contract called adder, which features a single function that adds two numbers and returns their sum. In Komet, we write our tests as contracts that interact with the contract we want to test. For this example, we will create a test_adder contract to verify the behavior of the adder contract.
 
