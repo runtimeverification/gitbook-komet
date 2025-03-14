@@ -5,6 +5,7 @@
 ## Guides
 
 * [Komet Example](guides/komet-example/README.md)
+* [Cheat Functions](guides/cheat-functions/README.md)
 
 ## Learn More
 
