@@ -4,9 +4,12 @@
 
 ## Guides
 
-## [Tips](tips/tips-for-using-kontrol.md)
+* [Komet Example](guides/komet-example/README.md)
+* [Cheat Functions](guides/cheat-functions/README.md)
 
-## [Learn More](learn-more/resources.md)
+## Learn More
+
+* [Resources](learn-more/resources.md)
 
 ## 🔗 Links
 * [Komet Homepage](https://komet.runtimeverification.com)
